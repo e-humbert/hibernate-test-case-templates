@@ -4,6 +4,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+import javax.persistence.TypedQuery;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,7 +32,11 @@ public class JPAUnitTestCase {
 	public void hhh123Test() throws Exception {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		entityManager.getTransaction().begin();
-		// Do stuff...
+
+		String stringQuery = "SELECT new org.hibernate.bugs.DataProjection(i, max(il)) FROM item i JOIN i.itemLists il GROUP BY i.id";
+		TypedQuery<DataProjection> query = entityManager.createQuery(stringQuery, DataProjection.class);
+		query.getResultList();
+
 		entityManager.getTransaction().commit();
 		entityManager.close();
 	}
